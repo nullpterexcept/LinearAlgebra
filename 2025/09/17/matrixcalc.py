@@ -1,5 +1,6 @@
 import util
 from math import isfinite
+from tabulate import tabulate
 
 def nonzero_finite_value(value: float):
     if value == 0 or not isfinite(value):
@@ -22,11 +23,11 @@ if util.ask_bool("Do you want to input a custom matrix (y/n)? (n): ", False):
         M[i] = util.ask_row("", num_cols, default="0 "*num_cols)
 
 def select_row():
-    print(M)
+    print(tabulate(M))
     row_index = util.ask_int("Select row: ", 1, num_rows) - 1
     while True:
         print(f"Row operations for row {row_index+1}")
-        print(M[row_index])
+        print(tabulate([M[row_index]]))
         print("[1] Edit")
         print("[2] rowSwap")
         print("[3] row+")
@@ -68,7 +69,7 @@ def select_row():
 
 def main():
     print("Matrix calculator")
-    print(M)
+    print(tabulate(M))
     print("[1] Select row")
     print("[2] ref")
     print("[3] rref")
