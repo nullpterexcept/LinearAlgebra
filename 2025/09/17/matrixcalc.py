@@ -1,9 +1,12 @@
 from fractions import Fraction
 import util
 
-row_1 = [Fraction(3), Fraction(-4), Fraction(0), Fraction(5)]
-row_2 = [Fraction(-1), Fraction(-2), Fraction(3), Fraction(10)]
-row_3 = [Fraction(4), Fraction(1), Fraction(1), Fraction(3)]
+RealNumber = float if util.ask_bool("Do you want to use floats over fractions (y/n)? (n): ", False) else Fraction
+util.NUMBER_PARSER = RealNumber
+
+row_1 = [RealNumber(3), RealNumber(-4), RealNumber(0), RealNumber(5)]
+row_2 = [RealNumber(-1), RealNumber(-2), RealNumber(3), RealNumber(10)]
+row_3 = [RealNumber(4), RealNumber(1), RealNumber(1), RealNumber(3)]
 
 M = [ row_1, row_2, row_3 ]
 

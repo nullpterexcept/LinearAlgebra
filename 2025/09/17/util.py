@@ -2,7 +2,10 @@ import readline
 from math import isfinite
 from fractions import Fraction
 from tabulate import tabulate
-    
+from typing import Callable, TypeVar
+
+RealNumber = TypeVar("RealNumber", float, Fraction)
+NUMBER_PARSER: Callable[[str], RealNumber] = Fraction
 def ask_int(prompt: str, minimum: int | float, maximum: int | float, default: str = "", validators=[]) -> int:
     def hook():
         readline.insert_text(default.strip())
@@ -21,14 +24,14 @@ def ask_int(prompt: str, minimum: int | float, maximum: int | float, default: st
         finally:
             readline.set_pre_input_hook(None)
 
-def ask_num(prompt: str, default: str = "", validators=[]) -> Fraction:
+def ask_num(prompt: str, default: str = "", validators=[]) -> RealNumber:
     def hook():
         readline.insert_text(default.strip())
         readline.redisplay()
     readline.set_pre_input_hook(hook)
     while True:
         try:
-            value = Fraction(input(prompt).strip())
+            value = NUMBER_PARSER(input(prompt).strip())
             for validator in validators:
                 validator(value)
             return value
@@ -37,7 +40,7 @@ def ask_num(prompt: str, default: str = "", validators=[]) -> Fraction:
         finally:
             readline.set_pre_input_hook(None)
 
-def ask_row(prompt: str, num_cols: int, default: str = "", validators=[]) -> list[Fraction]:
+def ask_row(prompt: str, num_cols: int, default: str = "", validators=[]) -> list[RealNumber]:
     def hook():
         readline.insert_text(default.strip())
         readline.redisplay()
@@ -45,7 +48,7 @@ def ask_row(prompt: str, num_cols: int, default: str = "", validators=[]) -> lis
     while True:
         try:
             row_str = input(prompt).strip()
-            row = [Fraction(n) for n in row_str.split(" ")]
+            row = [NUMBER_PARSER(n) for n in row_str.split(" ")]
             if len(row) != num_cols:
                 raise ValueError(f"Length of input {len(row)} does not match number of columns {num_cols}")
             for validator in validators:
@@ -64,36 +67,36 @@ def ask_bool(prompt: str, default: bool) -> bool:
         return False
     return default
     
-def nonzero_finite_value(value: Fraction):
+def nonzero_finite_value(value: RealNumber):
     if value == 0 or not isfinite(value):
         raise ValueError(f"{value} is not nonzero and finite")
 
-def rowSwap(M: list[list[Fraction]], row_index: int, row_swap_index: int):
+def rowSwap(M: list[list[RealNumber]], row_index: int, row_swap_index: int):
     k = M[row_index]
     M[row_index] = M[row_swap_index]
     M[row_swap_index] = k
 
-def rowAdd(M: list[list[Fraction]], row_index: int, row_add_index: int):
+def rowAdd(M: list[list[RealNumber]], row_index: int, row_add_index: int):
     for i in range(len(M[row_index])):
         M[row_index][i] += M[row_add_index][i]
         
-def rowMultiply(M: list[list[Fraction]], row_index: int, scalar: Fraction):
+def rowMultiply(M: list[list[RealNumber]], row_index: int, scalar: RealNumber):
     nonzero_finite_value(scalar)
     for i in range(len(M[row_index])):
         M[row_index][i] *= scalar
 
-def rowAddMultiple(M: list[list[Fraction]], row_index: int, row_add_index: int, scalar: Fraction):
+def rowAddMultiple(M: list[list[RealNumber]], row_index: int, row_add_index: int, scalar: RealNumber):
     nonzero_finite_value(scalar)
     for i in range(len(M[row_index])):
         M[row_index][i] += scalar * M[row_add_index][i]
         
 # This function exists purely for avoiding floating point rounding errors
-def rowDivide(M: list[list[Fraction]], row_index: int, scalar: Fraction):
+def rowDivide(M: list[list[RealNumber]], row_index: int, scalar: RealNumber):
     nonzero_finite_value(scalar)
     for i in range(len(M[row_index])):
         M[row_index][i] /= scalar
         
-def gauss_jordan_elimination(M: list[list[Fraction]], reduced: bool = True):
+def gauss_jordan_elimination(M: list[list[RealNumber]], reduced: bool = True):
     x = 0
     y = 0
     num_rows = len(M)
@@ -113,5 +116,5 @@ def gauss_jordan_elimination(M: list[list[Fraction]], reduced: bool = True):
         x += 1
         y += 1
         
-def print_matrix(M: list[list[Fraction]]):
+def print_matrix(M: list[list[RealNumber]]):
     print(tabulate([[format(frac) for frac in row] for row in M]))
