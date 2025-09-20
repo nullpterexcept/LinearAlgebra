@@ -1,8 +1,9 @@
+from fractions import Fraction
 import util
 
-row_1 = [3, -4, 0, 5]
-row_2 = [-1, -2, 3, 10]
-row_3 = [4, 1, 1, 3]
+row_1 = [Fraction(3), Fraction(-4), Fraction(0), Fraction(5)]
+row_2 = [Fraction(-1), Fraction(-2), Fraction(3), Fraction(10)]
+row_3 = [Fraction(4), Fraction(1), Fraction(1), Fraction(3)]
 
 M = [ row_1, row_2, row_3 ]
 
