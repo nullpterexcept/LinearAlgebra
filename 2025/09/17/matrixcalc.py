@@ -1,10 +1,5 @@
 import util
-from math import isfinite
 from tabulate import tabulate
-
-def nonzero_finite_value(value: float):
-    if value == 0 or not isfinite(value):
-        raise ValueError(f"{value} is not nonzero and finite")
 
 row_1 = [3, -4, 0, 5]
 row_2 = [-1, -2, 3, 10]
@@ -16,8 +11,8 @@ num_rows = len(M)
 num_cols = len(M[0])
 
 if util.ask_bool("Do you want to input a custom matrix (y/n)? (n): ", False):
-    num_rows = util.ask_int("Number of rows: ", 1, float("inf"), default="3", validators=[nonzero_finite_value])
-    num_cols = util.ask_int("Number of columns: ", 1, float("inf"), default="3", validators=[nonzero_finite_value])
+    num_rows = util.ask_int("Number of rows: ", 1, float("inf"), default="3", validators=[util.nonzero_finite_value])
+    num_cols = util.ask_int("Number of columns: ", 1, float("inf"), default="3", validators=[util.nonzero_finite_value])
     M = [None] * num_rows
     for i in range(num_rows):
         M[i] = util.ask_row("", num_cols, default="0 "*num_cols)
@@ -45,22 +40,17 @@ def select_row():
                 M[row_index] = util.ask_row("", num_cols, default=" ".join(map(str, M[row_index])))
             case 2:
                 row_swap_index = util.ask_int("Select row to swap with: ", 1, num_rows, validators=[elementary_no_same_row]) - 1
-                k = M[row_index]
-                M[row_index] = M[row_swap_index]
-                M[row_swap_index] = k
+                util.rowSwap(M, row_index, row_swap_index)
             case 3:
                 row_add_index = util.ask_int("Select row to add to this row: ", 1, num_rows, validators=[elementary_no_same_row]) - 1
-                for i in range(num_cols):
-                    M[row_index][i] += M[row_add_index][i]
+                util.rowAdd(M, row_index, row_add_index)
             case 4:
-                scalar = util.ask_num("Input scalar to multiply by: ", validators=[nonzero_finite_value])
-                for i in range(num_cols):
-                    M[row_index][i] *= scalar
+                scalar = util.ask_num("Input scalar to multiply by: ", validators=[util.nonzero_finite_value])
+                util.rowMultiply(M, row_index, scalar)
             case 5:
                 row_add_index = util.ask_int("Select row to add to this row: ", 1, num_rows, validators=[elementary_no_same_row]) - 1
-                scalar = util.ask_num(f"Input scalar to multiply added row (row {row_add_index+1}) by: ", validators=[nonzero_finite_value])
-                for i in range(num_cols):
-                    M[row_index][i] += scalar * M[row_add_index][i]
+                scalar = util.ask_num(f"Input scalar to multiply added row (row {row_add_index+1}) by: ", validators=[util.nonzero_finite_value])
+                util.rowAddMultiple(M, row_index, row_add_index, scalar)
             case 6:
                 break
             case 7:
@@ -79,9 +69,9 @@ def main():
         case 1:
             select_row()
         case 2:
-            pass
+            util.gauss_jordan_elimination(M, reduced=False)
         case 3:
-            pass
+            util.gauss_jordan_elimination(M, reduced=True)
         case 4:
             return
     main()
