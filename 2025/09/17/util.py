@@ -66,32 +66,32 @@ def nonzero_finite_value(value: float):
     if value == 0 or not isfinite(value):
         raise ValueError(f"{value} is not nonzero and finite")
 
-def rowSwap(M: list[list[int]], row_index: int, row_swap_index: int):
+def rowSwap(M: list[list[float]], row_index: int, row_swap_index: int):
     k = M[row_index]
     M[row_index] = M[row_swap_index]
     M[row_swap_index] = k
 
-def rowAdd(M: list[list[int]], row_index: int, row_add_index: int):
+def rowAdd(M: list[list[float]], row_index: int, row_add_index: int):
     for i in range(len(M[row_index])):
         M[row_index][i] += M[row_add_index][i]
         
-def rowMultiply(M: list[list[int]], row_index: int, scalar: float):
+def rowMultiply(M: list[list[float]], row_index: int, scalar: float):
     nonzero_finite_value(scalar)
     for i in range(len(M[row_index])):
         M[row_index][i] *= scalar
 
-def rowAddMultiple(M: list[list[int]], row_index: int, row_add_index: int, scalar: float):
+def rowAddMultiple(M: list[list[float]], row_index: int, row_add_index: int, scalar: float):
     nonzero_finite_value(scalar)
     for i in range(len(M[row_index])):
         M[row_index][i] += scalar * M[row_add_index][i]
         
 # This function exists purely for avoiding floating point rounding errors
-def rowDivide(M: list[list[int]], row_index: int, scalar: float):
+def rowDivide(M: list[list[float]], row_index: int, scalar: float):
     nonzero_finite_value(scalar)
     for i in range(len(M[row_index])):
         M[row_index][i] /= scalar
         
-def gauss_jordan_elimination(M: list[list[int]], reduced: bool = True):
+def gauss_jordan_elimination(M: list[list[float]], reduced: bool = True):
     x = 0
     y = 0
     num_rows = len(M)
