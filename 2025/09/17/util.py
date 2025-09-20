@@ -1,6 +1,8 @@
 import readline
 from math import isfinite
-
+from fractions import Fraction
+from tabulate import tabulate
+    
 def ask_int(prompt: str, minimum: int | float, maximum: int | float, default: str = "", validators=[]) -> int:
     def hook():
         readline.insert_text(default.strip())
@@ -19,14 +21,14 @@ def ask_int(prompt: str, minimum: int | float, maximum: int | float, default: st
         finally:
             readline.set_pre_input_hook(None)
 
-def ask_num(prompt: str, default: str = "", validators=[]) -> float:
+def ask_num(prompt: str, default: str = "", validators=[]) -> Fraction:
     def hook():
         readline.insert_text(default.strip())
         readline.redisplay()
     readline.set_pre_input_hook(hook)
     while True:
         try:
-            value = float(input(prompt).strip())
+            value = Fraction(input(prompt).strip())
             for validator in validators:
                 validator(value)
             return value
@@ -35,7 +37,7 @@ def ask_num(prompt: str, default: str = "", validators=[]) -> float:
         finally:
             readline.set_pre_input_hook(None)
 
-def ask_row(prompt: str, num_cols: int, default: str = "", validators=[]) -> list[float]:
+def ask_row(prompt: str, num_cols: int, default: str = "", validators=[]) -> list[Fraction]:
     def hook():
         readline.insert_text(default.strip())
         readline.redisplay()
@@ -43,7 +45,7 @@ def ask_row(prompt: str, num_cols: int, default: str = "", validators=[]) -> lis
     while True:
         try:
             row_str = input(prompt).strip()
-            row = [float(n) for n in row_str.split(" ")]
+            row = [Fraction(n) for n in row_str.split(" ")]
             if len(row) != num_cols:
                 raise ValueError(f"Length of input {len(row)} does not match number of columns {num_cols}")
             for validator in validators:
@@ -62,36 +64,36 @@ def ask_bool(prompt: str, default: bool) -> bool:
         return False
     return default
     
-def nonzero_finite_value(value: float):
+def nonzero_finite_value(value: Fraction):
     if value == 0 or not isfinite(value):
         raise ValueError(f"{value} is not nonzero and finite")
 
-def rowSwap(M: list[list[float]], row_index: int, row_swap_index: int):
+def rowSwap(M: list[list[Fraction]], row_index: int, row_swap_index: int):
     k = M[row_index]
     M[row_index] = M[row_swap_index]
     M[row_swap_index] = k
 
-def rowAdd(M: list[list[float]], row_index: int, row_add_index: int):
+def rowAdd(M: list[list[Fraction]], row_index: int, row_add_index: int):
     for i in range(len(M[row_index])):
         M[row_index][i] += M[row_add_index][i]
         
-def rowMultiply(M: list[list[float]], row_index: int, scalar: float):
+def rowMultiply(M: list[list[Fraction]], row_index: int, scalar: Fraction):
     nonzero_finite_value(scalar)
     for i in range(len(M[row_index])):
         M[row_index][i] *= scalar
 
-def rowAddMultiple(M: list[list[float]], row_index: int, row_add_index: int, scalar: float):
+def rowAddMultiple(M: list[list[Fraction]], row_index: int, row_add_index: int, scalar: Fraction):
     nonzero_finite_value(scalar)
     for i in range(len(M[row_index])):
         M[row_index][i] += scalar * M[row_add_index][i]
         
 # This function exists purely for avoiding floating point rounding errors
-def rowDivide(M: list[list[float]], row_index: int, scalar: float):
+def rowDivide(M: list[list[Fraction]], row_index: int, scalar: Fraction):
     nonzero_finite_value(scalar)
     for i in range(len(M[row_index])):
         M[row_index][i] /= scalar
         
-def gauss_jordan_elimination(M: list[list[float]], reduced: bool = True):
+def gauss_jordan_elimination(M: list[list[Fraction]], reduced: bool = True):
     x = 0
     y = 0
     num_rows = len(M)
@@ -110,3 +112,6 @@ def gauss_jordan_elimination(M: list[list[float]], reduced: bool = True):
                 rowAddMultiple(M, i, x, -M[i][y])
         x += 1
         y += 1
+        
+def print_matrix(M: list[list[Fraction]]):
+    print(tabulate([[format(frac) for frac in row] for row in M]))

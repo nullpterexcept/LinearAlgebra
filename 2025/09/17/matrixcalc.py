@@ -1,5 +1,4 @@
 import util
-from tabulate import tabulate
 
 row_1 = [3, -4, 0, 5]
 row_2 = [-1, -2, 3, 10]
@@ -18,11 +17,11 @@ if util.ask_bool("Do you want to input a custom matrix (y/n)? (n): ", False):
         M[i] = util.ask_row("", num_cols, default="0 "*num_cols)
 
 def select_row():
-    print(tabulate(M))
+    util.print_matrix(M)
     row_index = util.ask_int("Select row: ", 1, num_rows) - 1
     while True:
         print(f"Row operations for row {row_index+1}")
-        print(tabulate([M[row_index]]))
+        util.print_matrix([M[row_index]])
         print("[1] Edit")
         print("[2] rowSwap")
         print("[3] row+")
@@ -59,7 +58,7 @@ def select_row():
 
 def main():
     print("Matrix calculator")
-    print(tabulate(M))
+    util.print_matrix(M)
     print("[1] Select row")
     print("[2] ref")
     print("[3] rref")
