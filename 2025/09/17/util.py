@@ -107,6 +107,8 @@ def gauss_jordan_elimination(M: list[list[RealNumber]], reduced: bool = True):
                 if M[i][y] != 0:
                     rowSwap(M, x, i)
                     break
+        if M[x][y] == 0:
+            return
         rowDivide(M, x, M[x][y])
         for i in range(0 if reduced else x+1, num_rows):
             if i == x:
