@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    gap: 40px;
+}
+
+.matrix {
+    display: grid;
+    gap: 6px;
+}
+
+.cell, .resultCell {
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    line-height: 45px;
+    border: 1px solid #888;
+    font-size: 16px;
+}
+
+.cell {
+    background: white;
+}
+
+.resultCell {
+    background: #f5f5f5;
+}
+
+.config {
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.stepControls {
+    margin-top: 20px;
+}
+
+button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.animatedColumn {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 235, 59, 0.85);
+    border-radius: 6px;
+    transform-origin: center left;
+    transition: transform 0.9s ease, left 0.9s ease, top 0.9s ease;
+    pointer-events: none;
+}
+
+.pulse {
+    animation: pulse 0.6s ease;
+}
+
+@keyframes pulse {
+    0% { background: #fff176; }
+    50% { background: #fbc02d; }
+    100% { background: #fff176; }
+}
