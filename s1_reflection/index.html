@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<head>
+    <title>Matrix Multiplication Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="visualizer.js"></script>
+</head>
+<body>
+
+<h1>Matrix Multiplication Visualizer</h1>
+
+<p id="error"></p>
+
+<div class="container">
+    <div>
+        <div id="matrixA" class="matrix"></div>
+        <div class="config">
+            Rows <input id="aRows" type="number" min="1" value="2">
+            Cols <input id="aCols" type="number" min="1" value="2">
+        </div>
+    </div>
+
+    <div>
+        <div id="matrixB" class="matrix"></div>
+        <div class="config">
+            Rows <input id="bRows" type="number" min="1" value="2">
+            Cols <input id="bCols" type="number" min="1" value="2">
+        </div>
+    </div>
+
+    <div>
+        <div id="matrixC" class="matrix"></div>
+    </div>
+</div>
+
+<div class="stepControls">
+    <button id="nextBtn" onclick="nextStep()">Next Step</button>
+    <button onclick="skipAll()">Skip to End</button>
+    <button onclick="swap()">Swap matrices</button>
+</div>
+
+</body>
+</html>
